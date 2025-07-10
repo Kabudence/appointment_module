@@ -1,26 +1,27 @@
 from typing import Optional, List
 
-from personal.infraestructure.models.personal_model import PersonalModel
+from staff.domain.entities.staff import Staff
+from staff.infraestructure.models.staff_model import StaffModel
 
 
-class PersonalRepository:
-    def get_by_id(self, id:int) -> Optional[PersonalModel]:
+class StaffRepository:
+    def get_by_id(self, id:int) -> Optional[Staff]:
         try:
-            record = PersonalModel.get(PersonalModel.id == id)
-            return PersonalModel(
+            record = StaffModel.get(StaffModel.id == id)
+            return Staff(
                 id=record.id,
                 speciality=record.speciality,
                 name=record.name,
                 business_id=record.business_id,
                 max_capacity=record.max_capacity
             )
-        except PersonalModel.DoesNotExist:
+        except StaffModel.DoesNotExist:
             return None
 
-    def list_all(self) -> List[PersonalModel]:
-        records = PersonalModel.select()
+    def list_all(self) -> List[Staff]:
+        records = StaffModel.select()
         return [
-            PersonalModel(
+            Staff(
                 id=record.id,
                 speciality=record.speciality,
                 name=record.name,
@@ -29,17 +30,49 @@ class PersonalRepository:
             ) for record in records
         ]
 
-    def create(self, personal: PersonalModel) -> PersonalModel:
-        record = PersonalModel.create(
+    def create(self, personal: Staff) -> Staff:
+        record = StaffModel.create(
             speciality=personal.speciality,
             name=personal.name,
             business_id=personal.business_id,
             max_capacity=personal.max_capacity
         )
-        return PersonalModel(
+        return Staff(
             id=record.id,
             speciality=record.speciality,
             name=record.name,
             business_id=record.business_id,
             max_capacity=record.max_capacity
         )
+
+    def update(self, personal: Staff) -> Staff:
+        query = StaffModel.update(
+            speciality=personal.speciality,
+            name=personal.name,
+            business_id=personal.business_id,
+            max_capacity=personal.max_capacity
+        ).where(StaffModel.id == personal.id)
+        query.execute()
+        return self.get_by_id(personal.id)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

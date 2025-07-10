@@ -2,7 +2,7 @@ from peewee import Model, CharField, IntegerField
 from shared.infrastructure.database import db
 
 
-class PersonalModel(Model):
+class StaffModel(Model):
     id = IntegerField(primary_key=True)
     speciality = CharField()
     name = CharField()
@@ -11,4 +11,4 @@ class PersonalModel(Model):
 
     class Meta:
         database = db
-        table_name = 'personal'
+        table_name = 'staff'

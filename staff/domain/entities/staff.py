@@ -1,5 +1,5 @@
 
-class Personal:
+class Staff:
     def __init__(self,
                  id:int,
                  speciality:str,
