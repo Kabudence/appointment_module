@@ -1,21 +1,21 @@
 """
 Database initialization module for the Smart Band Edge Service.
 """
-from peewee import SqliteDatabase
-
-
+from peewee import MySQLDatabase
+from shared.infrastructure.db_config import DB_CONFIG
 
 # Initialize the database connection
-db = SqliteDatabase('test_appointment_db.db')
+db = MySQLDatabase(**DB_CONFIG)
 
 def init_db() -> None:
     """
-    Initialize the database connection. It also creates the necessary tables if they do not exist.
+    Initialize the database connection and create the necessary tables if they do not exist.
     """
-    db.connect()
-    """ 
-    Create tables if they do not exist.
-    """
-    # from health.infrastructure.models import HealthRecord
-    # from iam.infrastructure.models import Device
-    # db.create_tables([Device, HealthRecord], safe=True)  # Replace with actual model classes when defined
+    if db.is_closed():
+        db.connect()
+        print("Driver usado:", type(db._state.conn))
+
+    # Import models here to avoid circular imports
+    from staff.infraestructure.models.staff_model import StaffModel
+    db.create_tables([StaffModel], safe=True)
+

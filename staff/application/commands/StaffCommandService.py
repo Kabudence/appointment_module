@@ -1,8 +1,9 @@
 from staff.domain.entities.staff import Staff
+from staff.domain.services.staff_domain_service import StaffDomainService
 from staff.infraestructure.repositories.staff_repository import StaffRepository
 
 
-class PersonalCommandService:
+class StaffCommandService:
     """
     Service for handling personal commands.
     """
@@ -11,10 +12,27 @@ class PersonalCommandService:
         self.staff_repository = staff_repository
 
     def create(self,
+               speciality:str,
+               name:str,
+               business_id:int,
+               max_capacity:int,
+               dni:str) -> Staff:
+        staff= Staff( speciality=speciality, name=name, business_id=business_id, max_capacity=max_capacity, dni=dni)
+
+        all_staff = self.staff_repository.list_all()
+        StaffDomainService.validate_authenticity(staff,all_staff)
+
+        return self.staff_repository.create(staff)
+
+
+    def update(self,
                id:int ,
                speciality:str,
                name:str,
                business_id:int,
-               max_capacity:int) -> Staff:
-        staff= Staff(id=id, speciality=speciality, name=name, business_id=business_id, max_capacity=max_capacity)
-        return self.staff_repository.create(staff)
+               max_capacity:int,
+               dni:str) -> Staff:
+        staff = Staff(id=id, speciality=speciality, name=name, business_id=business_id, max_capacity=max_capacity,dni=dni)
+        all_staff = self.staff_repository.list_all()
+        StaffDomainService.validate_authenticity(staff, all_staff)
+        return self.staff_repository.update(staff)
