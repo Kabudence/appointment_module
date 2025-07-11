@@ -1,10 +1,12 @@
 from flask import Blueprint, request, jsonify
 
 from staff.application.commands.StaffCommandService import StaffCommandService
+from staff.application.queries.StaffQueryService import StaffQueryService
 from staff.infraestructure.repositories.staff_repository import StaffRepository
 
 repo= StaffRepository()
 staff_command_service=StaffCommandService(repo)
+staff_query_service=StaffQueryService(repo)
 
 staff_api = Blueprint('staff', __name__,)
 

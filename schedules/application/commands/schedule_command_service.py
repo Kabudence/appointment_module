@@ -63,11 +63,11 @@ class ScheduleCommandService:
 
         updated_schedule = self.schedule_repository.update(schedule)
 
-        # 2. Elimina todas las relaciones previas staff-horario
         self.schedule_staff_repository.delete(schedule_id)
 
-        # 3. Crea las nuevas relaciones (puede ser uno o muchos staff_ids)
+
         self._create_staff_relationships(updated_schedule.id, staff_ids)
+
         return updated_schedule
 
 

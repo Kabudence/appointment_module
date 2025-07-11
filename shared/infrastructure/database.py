@@ -16,6 +16,9 @@ def init_db() -> None:
         print("Driver usado:", type(db._state.conn))
 
     # Import models here to avoid circular imports
+    # Import models here to avoid circular imports
     from staff.infraestructure.models.staff_model import StaffModel
-    db.create_tables([StaffModel], safe=True)
+    from schedules.infraestructure.models.schedule_model import ScheduleModel, ScheduleStaffModel
+
+    db.create_tables([StaffModel, ScheduleModel, ScheduleStaffModel], safe=True)
 

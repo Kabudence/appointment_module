@@ -1,13 +1,14 @@
 from flask import Flask
 
-import staff.application.commands
-import staff.application.queries
+
+from schedules.interfaces.schedule_controller import schedule_api
 from staff.interfaces.staff_controller import staff_api
 from shared.infrastructure.database import init_db
 
 app = Flask(__name__)
 
 app.register_blueprint(staff_api)
+app.register_blueprint(schedule_api)
 
 first_request = True
 

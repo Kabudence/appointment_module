@@ -4,12 +4,12 @@ from shared.infrastructure.database import db
 
 class ScheduleModel(Model):
     id = AutoField(primary_key=True)
-    day = CharField(null=False, blank=False)
+    day = CharField(null=False)
     start_time = TimeField(null=False)
     end_time = TimeField(null=False)
-    negocio_id = CharField(null=False, blank=False)
-    business_id = CharField(null=False, blank=False)
-    is_active = CharField(null=False, blank=False)
+    negocio_id = CharField(null=False)
+    business_id = CharField(null=False)
+    is_active = CharField(null=False)
 
     class Meta:
         database = db

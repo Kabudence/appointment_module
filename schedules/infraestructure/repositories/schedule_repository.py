@@ -1,4 +1,4 @@
-from typing import Optional, List
+from typing import Optional, List, Dict, Any
 
 from schedules.domain.entities.schedule import Schedule
 from schedules.infraestructure.models.schedule_model import ScheduleModel,ScheduleStaffModel
