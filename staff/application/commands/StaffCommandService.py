@@ -14,10 +14,10 @@ class StaffCommandService:
     def create(self,
                speciality:str,
                name:str,
-               business_id:int,
+               negocio_id:int,
                max_capacity:int,
                dni:str) -> Staff:
-        staff= Staff( speciality=speciality, name=name, business_id=business_id, max_capacity=max_capacity, dni=dni)
+        staff= Staff( speciality=speciality, name=name, negocio_id=negocio_id, max_capacity=max_capacity, dni=dni)
 
         all_staff = self.staff_repository.list_all()
         StaffDomainService.validate_authenticity(staff,all_staff)
@@ -29,10 +29,10 @@ class StaffCommandService:
                id:int ,
                speciality:str,
                name:str,
-               business_id:int,
+               negocio_id:int,
                max_capacity:int,
                dni:str) -> Staff:
-        staff = Staff(id=id, speciality=speciality, name=name, business_id=business_id, max_capacity=max_capacity,dni=dni)
+        staff = Staff(id=id, speciality=speciality, name=name, negocio_id=negocio_id, max_capacity=max_capacity,dni=dni)
         all_staff = self.staff_repository.list_all()
         StaffDomainService.validate_authenticity(staff, all_staff)
         return self.staff_repository.update(staff)

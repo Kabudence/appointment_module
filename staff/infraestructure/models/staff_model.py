@@ -6,10 +6,9 @@ class StaffModel(Model):
     id = AutoField(primary_key=True)
     speciality = CharField()
     name = CharField()
-    business_id = IntegerField()
+    negocio_id = IntegerField()
     max_capacity = IntegerField()
-    dni = CharField()
-
+    dni = CharField(max_length=20, unique=True)
     class Meta:
         database = db
         table_name = 'staff'
