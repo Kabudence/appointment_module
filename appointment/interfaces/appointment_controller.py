@@ -28,7 +28,7 @@ def create_appointment():
             business_id=business_id,
             service_id=service_id,
         )
-        return jsonify(appointment.__dict__), 201
+        return jsonify(appointment.to_dict()), 201
 
     except Exception as e:
         return jsonify({'error': str(e)}), 400

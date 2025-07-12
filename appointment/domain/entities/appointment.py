@@ -38,3 +38,15 @@ class Appointment:
         )
 
 
+    def to_dict(self) -> dict:
+        return {
+            "id"         : self.id,
+            "start_time" : self.start_time.isoformat() if isinstance(self.start_time, datetime) else self.start_time,
+            "end_time"   : self.end_time.isoformat()   if isinstance(self.end_time,   datetime) else self.end_time,
+            "client_id"  : self.client_id,
+            "negocio_id" : self.negocio_id,
+            "staff_id"   : self.staff_id,
+            "status"     : self.status.value if isinstance(self.status, AppointmentStatus) else self.status,
+            "business_id": self.business_id,
+            "service_id" : self.service_id,
+        }

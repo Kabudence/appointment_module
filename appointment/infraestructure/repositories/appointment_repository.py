@@ -18,14 +18,30 @@ class AppointmentRepository:
         return [self._from_model(record) for record in query]
 
     def list_by_staff_and_day(self, staff_id: int, day: str):
-        """Todas las citas de un staff en una fecha (YYYY-MM-DD)."""
-        return (AppointmentModel
-                .select()
-                .where(
-                    (fn.DATE(AppointmentModel.start_time) == day) &
-                    (AppointmentModel.staff_id == staff_id) &
-                    (AppointmentModel.status != AppointmentStatus.CANCELLED.value)
-                ))
+        """
+        Recibe `day` en cualquiera de estos formatos:
+        • '2025-07-14'  → lo convierte a 'Monday'
+        • 'Monday'      → lo usa tal cual
+        """
+        # ── 1. Normaliza a nombre de día ──────────────────────────────
+        try:
+            # ¿viene como fecha ISO?
+            _date = datetime.strptime(day, "%Y-%m-%d")
+            day_name = _date.strftime("%A")  # 'Monday', 'Tuesday', …
+        except ValueError:
+            # No era fecha → asumimos que ya es 'Monday', etc.
+            day_name = day
+
+        # ── 2. Consulta por DAYNAME(start_time) ───────────────────────
+        return (
+            AppointmentModel
+            .select()
+            .where(
+                (fn.DAYNAME(AppointmentModel.start_time) == day_name) &
+                (AppointmentModel.staff_id == staff_id) &
+                (AppointmentModel.status != AppointmentStatus.CANCELLED.value)
+            )
+        )
 
     def is_staff_free(self,
                       staff_id: int,
