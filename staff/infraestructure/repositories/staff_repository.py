@@ -74,8 +74,34 @@ class StaffRepository:
         query.execute()
         return self.get_by_id(personal.id)
 
+    def list_by_negocio_business(
+            self,
+            negocio_id: int,
+            business_id: Optional[int] = None,
+    ) -> List[Staff]:
+        """
+        Lista el personal que trabaja en un negocio (obligatorio)
+        y, opcionalmente, en una sucursal/business específica.
 
+        :param negocio_id: ID del negocio (company / brand).
+        :param business_id: ID del business / local (opcional).
+        """
+        query = StaffModel.select().where(StaffModel.negocio_id == negocio_id)
 
+        if business_id is not None:
+            query = query.where(StaffModel.business_id == business_id)
+
+        return [
+            Staff(
+                id=rec.id,
+                speciality=rec.speciality,
+                name=rec.name,
+                business_id=rec.business_id,
+                max_capacity=rec.max_capacity,
+                dni=rec.dni,
+            )
+            for rec in query
+        ]
 
 
 
