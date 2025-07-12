@@ -122,3 +122,5 @@ def update_schedule():
         return jsonify(schedule.to_dict()), 200
     except ValueError as e:
         return jsonify({"error": str(e)}), 400
+
+

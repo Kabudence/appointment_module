@@ -60,3 +60,41 @@ class AppointmentRepository:
             business_id=record.business_id,
             service_id=record.service_id,
         )
+
+    def create(self, appointment: Appointment) -> Appointment:
+        # Crea el registro en la base de datos
+        record = AppointmentModel.create(
+            start_time=appointment.start_time,
+            end_time=appointment.end_time,
+            client_id=appointment.client_id,
+            negocio_id=appointment.negocio_id,
+            staff_id=appointment.staff_id,
+            business_id=appointment.business_id,
+            service_id=appointment.service_id,
+            status=appointment.status.value if isinstance(appointment.status, AppointmentStatus) else appointment.status
+        )
+        # Devuelve el entity actualizado con el id real
+        return self._from_model(record)
+
+    def update(self, appointment: Appointment) -> Appointment:
+        # Actualiza el registro existente
+        query = AppointmentModel.update(
+            start_time=appointment.start_time,
+            end_time=appointment.end_time,
+            client_id=appointment.client_id,
+            negocio_id=appointment.negocio_id,
+            staff_id=appointment.staff_id,
+            business_id=appointment.business_id,
+            service_id=appointment.service_id,
+            status=appointment.status.value if isinstance(appointment.status, AppointmentStatus) else appointment.status
+        ).where(AppointmentModel.id == appointment.id)
+        query.execute()
+        # Recupera y retorna la versión actualizada
+        return self.get_by_id(appointment.id)
+
+    def get_by_id(self, appointment_id: int) -> Appointment | None:
+        try:
+            record = AppointmentModel.get(AppointmentModel.id == appointment_id)
+            return self._from_model(record)
+        except AppointmentModel.DoesNotExist:
+            return None

@@ -18,7 +18,8 @@ def init_db() -> None:
     # Import models here to avoid circular imports
     # Import models here to avoid circular imports
     from staff.infraestructure.models.staff_model import StaffModel
+    from appointment.infraestructure.models.appointment_model import AppointmentModel
     from schedules.infraestructure.models.schedule_model import ScheduleModel, ScheduleStaffModel
 
-    db.create_tables([StaffModel, ScheduleModel, ScheduleStaffModel], safe=True)
+    db.create_tables([StaffModel, ScheduleModel, ScheduleStaffModel,AppointmentModel], safe=True)
 

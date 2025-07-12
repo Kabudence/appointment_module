@@ -17,7 +17,7 @@ def create_staff():
         staff = staff_command_service.create(
             speciality=data['speciality'],
             name=data['name'],
-            business_id=data['business_id'],
+            negocio_id=data['negocio_id'],
             max_capacity=data['max_capacity'],
             dni=data['dni']
         )
@@ -34,7 +34,7 @@ def update_staff():
             id=data['id'],
             speciality=data['speciality'],
             name=data['name'],
-            business_id=data['business_id'],
+            negocio_id=data['negocio_id'],
             max_capacity=data['max_capacity'],
             dni=data['dni']
         )
@@ -62,7 +62,7 @@ def get_staff_list():
         "id": staff.id,
         "speciality": staff.speciality,
         "name": staff.name,
-        "business_id": staff.business_id,
+        "negocio_id": staff.negocio_id,
         "max_capacity": staff.max_capacity,
         "dni": staff.dni
     } for staff in staff_list]), 200
@@ -85,7 +85,7 @@ def staff_to_json(staff):
         "id": staff.id,
         "speciality": staff.speciality,
         "name": staff.name,
-        "business_id": staff.business_id,
+        "negocio_id": staff.negocio_id,
         "max_capacity": staff.max_capacity,
         "dni": staff.dni
     }

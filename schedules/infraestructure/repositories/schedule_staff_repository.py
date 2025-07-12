@@ -28,7 +28,12 @@ class ScheduleStaffRepository:
 
         return True
 
-
+    def get_staff_ids_by_schedule(self, schedule_id: int) -> list:
+        """
+        Devuelve la lista de staff_id asociados a un horario (schedule).
+        """
+        query = ScheduleStaffModel.select().where(ScheduleStaffModel.schedule_id == schedule_id)
+        return [rec.staff_id for rec in query]
 
 
 
