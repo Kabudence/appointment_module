@@ -1,20 +1,6 @@
-
-from flask import Blueprint,request
-from schedules.application.commands.schedule_command_service import ScheduleCommandService
-from schedules.application.queries.schedule_query_service import ScheduleQueryService
-from schedules.infraestructure.repositories.schedule_repository import ScheduleRepository
-from schedules.infraestructure.repositories.schedule_staff_repository import ScheduleStaffRepository
-
-
-repo_schedule=ScheduleRepository()
-repo_schedule_staff=ScheduleStaffRepository()
-schedule_command_service = ScheduleCommandService( repo_schedule, repo_schedule_staff)
-schedule_query_service = ScheduleQueryService(repo_schedule)
+from flask import Blueprint, request, jsonify, current_app
 
 schedule_api = Blueprint('schedule', __name__)
-
-from flask import jsonify
-
 
 @schedule_api.route('/schedules', methods=['GET'])
 def get_all_schedules():
@@ -24,6 +10,9 @@ def get_all_schedules():
     if not negocio_id:
         return jsonify({"error": "Missing negocio_id"}), 400
 
+    # Usamos el query service inyectado
+    schedule_query_service = current_app.config["schedule_query_service"]
+
     schedules = schedule_query_service.get_all_days_by_negocio_business(
         negocio_id=negocio_id,
         business_id=business_id
@@ -32,14 +21,14 @@ def get_all_schedules():
 
 @schedule_api.route('/schedule-with-staff', methods=['GET'])
 def get_schedule_with_staff():
-    # Recupera los parámetros de la URL
     negocio_id = request.args.get('negocio_id', type=int)
     business_id = request.args.get('business_id', type=int)
     day = request.args.get('day', type=str)
 
-    # Validaciones básicas
     if not (negocio_id and business_id and day):
         return jsonify({"error": "Missing one or more required params (negocio_id, business_id, day)"}), 400
+
+    schedule_query_service = current_app.config["schedule_query_service"]
 
     try:
         result = schedule_query_service.get_schedule_with_staff_by_negocio_business_and_day(
@@ -57,9 +46,10 @@ def get_schedule():
     business_id = request.args.get('business_id', type=int)
     day = request.args.get('day', type=str)
 
-    # Validaciones básicas
     if not (negocio_id and business_id and day):
         return jsonify({"error": "Missing one or more required params (negocio_id, business_id, day)"}), 400
+
+    schedule_query_service = current_app.config["schedule_query_service"]
 
     try:
         result = schedule_query_service.get_by_negocio_business_and_day(
@@ -83,6 +73,7 @@ def create_schedule():
     if not (isinstance(staff_ids, list) or isinstance(staff_ids, int)):
         return jsonify({"error": "'staff_ids' must be a list or an integer"}), 400
 
+    schedule_command_service = current_app.config["schedule_command_service"]
 
     try:
         schedule = schedule_command_service.create(
@@ -109,6 +100,8 @@ def update_schedule():
     if not (isinstance(staff_ids, list) or isinstance(staff_ids, int)):
         return jsonify({"error": "'staff_ids' must be a list or an integer"}), 400
 
+    schedule_command_service = current_app.config["schedule_command_service"]
+
     try:
         schedule = schedule_command_service.update(
             schedule_id=data['id'],
@@ -122,5 +115,3 @@ def update_schedule():
         return jsonify(schedule.to_dict()), 200
     except ValueError as e:
         return jsonify({"error": str(e)}), 400
-
-

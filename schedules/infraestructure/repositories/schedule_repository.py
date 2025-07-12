@@ -90,7 +90,7 @@ class ScheduleRepository:
                 "id": s.id,
                 "speciality": s.speciality,
                 "name": s.name,
-                "business_id": s.business_id,
+                "negocio_id": s.negocio_id,
                 "max_capacity": s.max_capacity,
                 "dni": getattr(s, "dni", None)
             } for s in staff_query]
